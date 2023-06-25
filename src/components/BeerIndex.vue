@@ -1,38 +1,51 @@
-<script setup>
-import { ref } from 'vue'
-
-
-const beers = ref([
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-    {"name": "Buzz", "ibu": 10, "food_paring": 2},
-])
-</script>
-
 <template>
-  <div class="grid grid-cols-3 gap-5">
-    <div class="card rounded bg-slate-50" v-for="beer in beers">
-      <a href="#" class="text-yellow-500 hover:text-yellow-300 hover:underline">
-         <div class="px-6 py-4">
-          <div class="font-bold text-xl">{{ beer.name}}</div>
-        </div>
-        <div class="">
-          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            Goryczka (IBU): {{ beer.ibu }}
-          </span>
-          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            Parowanie jedzenia: {{ beer.food_paring }}
-          </span>
-        </div>
-      </a>
+  <header-panel/>
+  <div v-if="beers.length > 0">
+    <div class="grid grid-cols-3 gap-5">
+      <beer-card v-for="beer in beers" :ibu="beer.ibu" :name="beer.name" :food_paring="beer.food_paring"/>
+    </div>
+    <div class="py-5 flex justify-end">
+      <beer-pagination/>
     </div>
   </div>
-
+  <div v-else>
+    <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+      <p class="font-bold">Nie znaleziono wyników</p>
+      <p>Spróbuj zmienić parametry wyszukiwania</p>
+    </div>
+  </div>
 </template>
+
+<script>
+import BeerCard from "./BeerCard.vue";
+import BeerPagination from "./BeerPagination.vue";
+import HeaderPanel from "./HeaderPanel.vue";
+import { fetchBeers } from "../services/beer-service.js";
+
+export default {
+  name: "BeerIndex",
+  components: {
+    'header-panel': HeaderPanel,
+    'beer-pagination': BeerPagination,
+    'beer-card': BeerCard,
+  },
+  data() {
+    return {
+      beers: []
+    }
+  },
+  async mounted() {
+    try {
+      this.beers = await fetchBeers();
+    } catch (error) {
+      console.log('unexpected error: ', error);
+    }
+  },
+  methods: {
+
+  },
+}
+
+</script>
+
+
