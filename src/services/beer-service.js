@@ -2,7 +2,7 @@ import axios from "axios";
 
 const mainUrl = 'https://api.punkapi.com/v2/beers';
 
-export const callBeers = async (url, params) => {
+export const callBeers = async (url, params = null) => {
     return await axios.get(
         url,
         {
@@ -19,6 +19,21 @@ export const fetchBeers = async (params = null) => {
         callBeers(mainUrl, params)
             .then((response) => {
                 resolve(response.data);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+
+}
+
+export const fetchBeerById = async (id) => {
+
+    const beerUrl = `${mainUrl}/${id}`
+    return new Promise((resolve, reject) => {
+        callBeers(beerUrl)
+            .then((response) => {
+                resolve([...response.data].shift());
             })
             .catch((error) => {
                 reject(error);

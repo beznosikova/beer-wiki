@@ -8,6 +8,9 @@
       <beer-card v-for="beer in beers" :ibu="beer.ibu" :name="beer.name" :food_paring="beer.food_paring" :id="beer.id"/>
     </div>
   </div>
+  <div v-else-if="isFetching">
+    Trwa pobieranie...
+  </div>
   <div v-else>
     <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
       <p class="font-bold">Nie znaleziono wyników</p>
@@ -34,7 +37,8 @@ export default {
   data() {
     return {
       beers: [],
-      filter: {}
+      filter: {},
+      isFetching: true,
     }
   },
   async mounted() {
@@ -59,6 +63,7 @@ export default {
       } catch (error) {
         console.log('unexpected error: ', error);
       }
+      this.isFetching = false;
     },
     async updateFilter(filter) {
       this.filter = {...filter}
