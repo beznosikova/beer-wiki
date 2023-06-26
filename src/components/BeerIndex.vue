@@ -5,7 +5,7 @@
       <beer-card v-for="beer in beers" :ibu="beer.ibu" :name="beer.name" :food_paring="beer.food_paring"/>
     </div>
     <div class="py-5 flex justify-end">
-      <beer-pagination :activePage ="activePage" />
+      <beer-pagination :activePage="activePage"/>
     </div>
   </div>
   <div v-else>
@@ -20,7 +20,7 @@
 import BeerCard from "./BeerCard.vue";
 import BeerPagination from "./BeerPagination.vue";
 import HeaderPanel from "./HeaderPanel.vue";
-import { fetchBeers } from "../services/beer-service.js";
+import {fetchBeers} from "../services/beer-service.js";
 
 export default {
   name: "BeerIndex",
@@ -35,10 +35,13 @@ export default {
     }
   },
   async mounted() {
-    try {
-      this.beers = await fetchBeers();
-    } catch (error) {
-      console.log('unexpected error: ', error);
+    await this.updateBeers();
+  },
+  watch: {
+    async '$route.query.page'(currentPage, prevPage) {
+      if (currentPage !== prevPage) {
+        await this.updateBeers();
+      }
     }
   },
   computed: {
@@ -47,7 +50,13 @@ export default {
     },
   },
   methods: {
-
+    async updateBeers() {
+      try {
+        this.beers = [...await fetchBeers({page: this.activePage})];
+      } catch (error) {
+        console.log('unexpected error: ', error);
+      }
+    }
   },
 }
 
