@@ -5,7 +5,7 @@
   </div>
   <div v-if="beers.length > 0">
     <div class="grid grid-cols-3 gap-5">
-      <beer-card v-for="beer in beers" :ibu="beer.ibu" :name="beer.name" :food_paring="beer.food_paring"/>
+      <beer-card v-for="beer in beers" :ibu="beer.ibu" :name="beer.name" :food_paring="beer.food_paring" :id="beer.id"/>
     </div>
   </div>
   <div v-else>
@@ -60,7 +60,7 @@ export default {
         console.log('unexpected error: ', error);
       }
     },
-    async updateFilter(filter){
+    async updateFilter(filter) {
       this.filter = {...filter}
       await this.updateBeers();
     }
