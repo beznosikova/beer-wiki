@@ -1,17 +1,15 @@
-## for local development with file syncing!!!
+#  with using Dockerfile
 version: "3.4"
 services:
-  beer_wiki:
-    image: node:18-alpine
-    container_name: beer_wiki
-    entrypoint: /bin/sh
+  beer_wiki_app:
+    container_name: beer_wiki_app
+    restart: always
+    build: .
     ports:
-      - 80:8080
-    working_dir: /srv/app
+      - 8080:8080
     volumes:
-#      -      './: /srv/app' -  It is useful in other situations, but avoids syncing between hosts and containers.
       - type: bind
         source: ./
-        target: /srv/app
-    tty: true
+        target: /app
+
 
