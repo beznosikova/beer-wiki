@@ -1,0 +1,17 @@
+## for local development with file syncing!!!
+version: "3.4"
+services:
+  beer_wiki:
+    image: node:18-alpine
+    container_name: beer_wiki
+    entrypoint: /bin/sh
+    ports:
+      - 80:8080
+    working_dir: /srv/app
+    volumes:
+#      -      './: /srv/app' -  It is useful in other situations, but avoids syncing between hosts and containers.
+      - type: bind
+        source: ./
+        target: /srv/app
+    tty: true
+
