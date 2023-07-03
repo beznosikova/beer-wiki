@@ -4,9 +4,11 @@ services:
   beer_wiki_app:
     container_name: beer_wiki_app
     restart: always
-    build: .
+    build:
+      context: .
+      target: 'develop'
     ports:
-      - 8080:8080
+      - 8080:80
     volumes:
       - type: bind
         source: ./
